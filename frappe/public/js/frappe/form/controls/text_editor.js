@@ -105,6 +105,61 @@ CustomColor.tagName = "font";
 
 Quill.register(CustomColor, true);
 
+// Custom Blocks, Paragraphs, Heading
+const Block = Quill.import('blots/block');
+
+class CustomBlock extends Block {
+	static create(value) {
+		let node = super.create(value);
+		node.classList.add('container-fluid', 'container-24', 'f-14');
+		return node;
+	}
+}
+
+class HeaderBlot extends Block {
+	static blotName = 'header';
+	// Frappe only supports three header sizes, so we will only demonstrate two,
+	// but we could easily just add more tags into this array
+	static tagName = ['H1', 'H2', 'H3'];
+
+	static create(value) {
+		let node = super.create(value);
+		if (node.tagName === 'H1' || node.tagName === 'H2' || node.tagName === 'H3') {
+			node.classList.add('container-fluid', 'container-24', 'f-18');
+		}
+		return node;
+	}
+
+	static formats(node) {
+		return HeaderBlot.tagName.indexOf(node.tagName) + 1;
+	}
+}
+
+class BlockquoteBlot extends Block {
+	static blotName = 'blockquote';
+	static tagName = 'blockquote';
+
+	static create(value) {
+		let node = super.create(value);
+		node.classList.add('container-fluid', 'container-24', 'f-14');
+		return node;
+	}
+}
+
+/*
+const BlockEmbed = Quill.import('blots/block/embed');
+class BreakBlot extends BlockEmbed {
+	static blotName = 'break';
+	static tagName = 'br';
+}
+Quill.register(BreakBlot);
+*/
+
+Quill.register(CustomBlock);
+Quill.register(HeaderBlot);
+Quill.register(BlockquoteBlot);
+
+
 frappe.ui.form.ControlTextEditor = class ControlTextEditor extends frappe.ui.form.ControlCode {
 	make_wrapper() {
 		super.make_wrapper();
